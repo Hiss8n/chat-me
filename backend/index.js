@@ -24,9 +24,9 @@ app.use(
   }),
 );
 
-app.use("/api/user", userRoutes);
-app.use("/api/messages", messagesRoutes);
-app.use("/api/chats", getChatsRoutes);
+app.use("/user", userRoutes);
+app.use("/messages", messagesRoutes);
+app.use("/chats", getChatsRoutes);
 
 app.get("/", (req, res) => {
   res.send("hello");

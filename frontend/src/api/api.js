@@ -1,9 +1,9 @@
-export const API_URL = "http://localhost:5000/api";
+export const API_URL = "https://chatme-p0ah.onrender.com" ||"https://localhost:500/api ";
 
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://localhost:500/api",
   withCredentials: true,
 });
 

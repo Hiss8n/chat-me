@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { io } from "socket.io-client";
 import axiosInstance, { API_URL } from "../api/api";
 
-const BASE_URL = import.meta.env.DEV ? "http://localhost:5000" : "/";
+const BASE_URL = import.meta.env.DEV ? "http://localhost:5000" : API_URL;
 
 export const useAuthStore = create((set, get) => ({
 
@@ -133,7 +133,7 @@ export const useAuthStore = create((set, get) => ({
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
-    const socket = io(BASE_URL, {
+    const socket = io(API_URL, {
       withCredentials: true,
       auth: { token: get().token },
     });

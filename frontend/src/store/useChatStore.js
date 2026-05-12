@@ -13,9 +13,11 @@ export const useChatStore = create((set, get) => ({
   getAllContacts: async () => {
     set({ isLoading: true });
     try {
-      const res = await axiosInstance.get(`/user`);
+      const res = await fetch(`${API_URL}/user`);
 
-      set({ contacts: res.data });
+      const data=await res.json()
+
+      set({ contacts: data.data });
     } catch (error) {
       console.log(error);
     } finally {

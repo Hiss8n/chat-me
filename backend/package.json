@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch src/index",
-    "build": "node src/index"
+    "dev": "node --watch index",
+    "build": "node index"
   },
   "keywords": [],
   "author": "",
