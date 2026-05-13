@@ -13,7 +13,17 @@ export const useChatStore = create((set, get) => ({
   getAllContacts: async () => {
     set({ isLoading: true });
     try {
-      const res = await fetch(`${API_URL}/user`);
+      const token=useAuthStore.getState().token;
+
+
+      const res = await fetch(`${API_URL}/user`,{
+        method:"GET",
+        headers:{
+          "Content-type":"application/json",
+          Authorization:`Bearer ${token}`
+          
+        }
+      });
 
       const data=await res.json()
 

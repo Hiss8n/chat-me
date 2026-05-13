@@ -43,7 +43,7 @@ console.log("this are online users", onlineUsers)
             {/* User Item */}
 
             {
-                contacts.length > 0 ? (
+                contacts?.length > 0 ? (
                     contacts.map((contact, index) => (<div onClick={() => handleSellectedUser(contact)} className={`flex-col gap-5 ${selectedUser?._id === contact._id ? "bg-slate-400" : ""}`} key={contact?._id} >
                         <div className='flex flex-col space-y-3' key={contact._id}>
                             <div className={`flex items-center space-x-3 hover:bg-gray-100 p-2 rounded-lg cursor-pointer transition `}>
