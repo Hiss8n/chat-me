@@ -23,7 +23,8 @@ function Contacts() {
         
 
     }, [])
-console.log("this are online users", onlineUsers)
+
+console.log("These are contacts:", contacts);
 
 
 

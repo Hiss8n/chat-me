@@ -27,7 +27,8 @@ export const useChatStore = create((set, get) => ({
 
       const data=await res.json()
 
-      set({ contacts: data.data });
+      console.log("contacts response here", data);
+      set({ contacts: data });
     } catch (error) {
       console.log(error);
     } finally {
@@ -69,6 +70,18 @@ export const useChatStore = create((set, get) => ({
     const tempId = `${Date.now()}`;
     set({ isLoading: true });
     try {
+      // create optimistic message and append immediately
+      const optimisticMessage = {
+        _id: tempId,
+        senderId: [authUser?._id],
+        receiverId: [selectedUser?._id],
+        message: messageData,
+        createdAt: new Date().toISOString(),
+        optimistic: true,
+      };
+
+      set({ messages: [...messages, optimisticMessage] });
+
       const res = await fetch(`${API_URL}/messages/send/${selectedUser._id}`, {
         method: "POST",
         headers: {
@@ -81,11 +94,13 @@ export const useChatStore = create((set, get) => ({
       });
 
       const data = await res.json();
-      /*   console.log("messageData", data); */
-      set({ messages: [...messages, data] });
+
+      // replace optimistic message with server response
+      set({ messages: get().messages.map((m) => (m._id === tempId ? data : m)) });
     } catch (error) {
       console.log(error);
-      set({ messages: messages });
+      // mark optimistic message as failed (so UI can show retry state if desired)
+      set({ messages: get().messages.map((m) => (m._id === tempId ? { ...m, failed: true, optimistic: false } : m)) });
     } finally {
       set({ isLoading: false });
     }
