@@ -1,6 +1,6 @@
 import Chat from "../models/Chat.js";
 import Message from "../models/Message.js";
-import { getOnlineUser, io } from "../utils/socket.js";
+import { getSocketUserMap, io } from "../utils/socket.js";
 
 
 const sendMessage = async (req, res) => {
@@ -23,13 +23,25 @@ const sendMessage = async (req, res) => {
       message,
     });
 
-    //If the user is online send newMessage in real-time
+    // If the receiver is online, send the message in real-time before saving
+    const socketUserMap = getSocketUserMap();
+    const receiverSocketIds = Object.entries(socketUserMap)
+      .filter(([, user]) => user.userId === receiverId)
+      .map(([sid]) => sid);
 
-    const userOnline = getOnlineUser(receiverId);
+    if (receiverSocketIds.length > 0) {
+      const payload = {
+        sender: { _id: senderId },
+        receiverId,
+        message,
+        // note: not yet saved so no _id/timestamps
+        pending: true,
+        sentAt: new Date().toISOString(),
+      };
+      receiverSocketIds.forEach((sid) => io.to(sid).emit("new-message", payload));
+    }
 
-    console.log("user here:",userOnline)
-  
-    // save message first so it has _id and timestamps
+    // save message so it has _id and timestamps
     const savedMessage = await newMessage.save();
 
     if (savedMessage) {
@@ -37,12 +49,14 @@ const sendMessage = async (req, res) => {
       await chat.save();
     }
 
-    // If the receiver is online, emit the saved message
-    if (userOnline) {
-      io.to(userOnline).emit("new-message", {
-        ...savedMessage._doc,
-        sender: { _id: senderId },
-      });
+    // emit the final saved message (with _id) if receiver still online
+    if (receiverSocketIds.length > 0) {
+      receiverSocketIds.forEach((sid) =>
+        io.to(sid).emit("new-message-saved", {
+          ...savedMessage._doc,
+          sender: { _id: senderId },
+        }),
+      );
     }
 
     return res.status(201).json(savedMessage);
