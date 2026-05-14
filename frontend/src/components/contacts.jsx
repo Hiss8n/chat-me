@@ -19,12 +19,10 @@ function Contacts() {
       }, [selectedUser, login])
    */
     useEffect(() => {
-        getAllContacts()
-        
-
+        getAllContacts();
     }, [])
 
-console.log("These are contacts:", contacts);
+
 
 
 
@@ -32,7 +30,7 @@ console.log("These are contacts:", contacts);
     const handleSellectedUser = (contact) => {
         setSelectedUser(contact)
         getMessagesWith(contact._id)
-        console.log(contact._id)
+       
 
     }
 

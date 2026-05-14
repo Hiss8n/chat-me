@@ -40,6 +40,7 @@ const sendMessage = async (req, res) => {
       };
       receiverSocketIds.forEach((sid) => io.to(sid).emit("new-message", payload));
     }
+    console.log("payload",payload)
 
     // save message so it has _id and timestamps
     const savedMessage = await newMessage.save();

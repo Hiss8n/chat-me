@@ -8,9 +8,9 @@ import NoChatSelected from './NoSelectedUser';
 
 function ChatSection() {
 
-    const { selectedUser, sendMessage, messages, getMessagesWith } = useChatStore();
+    const { selectedUser, sendMessage, messages, getMessagesWith, } = useChatStore();
     const [text, setText] = useState("");
-    const { authUser, } = useAuthStore();
+    const { authUser,socketMessages } = useAuthStore();
 
     const bottomRef = useRef(null);
     useEffect(() => {

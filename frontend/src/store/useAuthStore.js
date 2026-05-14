@@ -117,10 +117,12 @@ export const useAuthStore = create((set, get) => ({
     if (!socket) return;
 
     // emit to server
-    socket.emit("send-message", message);
+   /*  socket.emit("send-message", message); */
 
     socket.on("new-message", (data) => {
+      console.log("new msg",data);
       set({socketMessages:[...get().socketMessages,data]  })
+      console.log(data)
 
      
   }) }, 

@@ -51,7 +51,7 @@ const ChatUi = () => {
               
 
                 
-             console.log("base64 here:!!!", base64);
+             
 
               
             };
